@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import {
   Container,
   Typography,
@@ -13,6 +14,7 @@ import {
 import RepoList from './components/RepoList';
 import ReleaseNotes from './components/ReleaseNotes';
 import AddRepo from './components/AddRepo';
+import { GET_REPOS, ADD_REPO, REMOVE_REPO } from '../apollo/queries';
 
 // Create a custom theme
 const theme = createTheme({
@@ -35,35 +37,88 @@ export interface Repository {
   releaseNotes: string;
 }
 
+// Type the GraphQL response
+interface GetReposData {
+  trackedRepos: Array<{
+    id: number;
+    name: string;
+    owner: string;
+    url: string;
+    latestReleaseTag: string | null;
+    latestReleaseNotes: string | null;
+    seenByUser: boolean;
+  }>;
+}
+
+
 function App() {
-  const [repos, setRepos] = useState<Repository[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
 
-  const handleAddRepo = (owner: string, name: string) => {
-    const newRepo: Repository = {
-      id: Date.now(), // Use timestamp as simple unique ID
-      name,
-      owner,
-      version: 'N/A',
-      releaseNotes: 'No release notes available yet.'
-    };
-    setRepos([...repos, newRepo]);
+  const { loading, error, data } = useQuery<GetReposData>(GET_REPOS);
 
-    // Auto-select the first repo if none selected
-    if (!selectedRepo) {
-      setSelectedRepo(newRepo);
+  const [addRepoMutation] = useMutation(ADD_REPO, {
+    refetchQueries: [{ query: GET_REPOS }],
+
+  });
+  const [removeRepoMutation] = useMutation(REMOVE_REPO, {
+    refetchQueries: [{ query: REMOVE_REPO }],
+  });
+
+
+  const repos: Repository[] = data?.trackedRepos.map((repo: any) => ({
+    id: repo.id,
+    name: repo.name,
+    owner: repo.owner,
+    version: repo.latestReleaseTag || 'N/A',
+    releaseNotes: repo.latestReleaseNotes || 'No release notes available yet.',
+  })) || [];
+
+  const handleAddRepo = async (owner: string, name: string) => {
+    try {
+      await addRepoMutation({
+        variables: { owner, name },
+      });
+    } catch (err) {
+      console.error('Error adding repository:', err);
     }
   };
 
-  const handleRemoveRepo = (id: number) => {
-    const updatedRepos = repos.filter(repo => repo.id !== id);
-    setRepos(updatedRepos);
+  const handleRemoveRepo = async (id: number) => {
+    try {
+      await removeRepoMutation({
+        variables: { id },
+      });
 
-    // If we removed the selected repo, select the first available one
-    if (selectedRepo?.id === id) {
-      setSelectedRepo(updatedRepos[0] || null);
+      // If we removed the selected repo, clear selection
+      if (selectedRepo?.id === id) {
+        setSelectedRepo(null);
+      }
+    } catch (err) {
+      console.error('Error removing repository:', err);
     }
   };
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+          <Typography variant="h6">Loading repositories...</Typography>
+        </Box>
+      </ThemeProvider>
+    );
+  }
+
+  if (error) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+          <Typography variant="h6" color="error">Error loading repositories: {error.message}</Typography>
+        </Box>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
