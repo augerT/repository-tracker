@@ -32,7 +32,7 @@ cd repository-tracker
 cd backend
 npm run db:setup
 ```
-Note: If your psql user is not "postgres", please modify this script in package JSON to use your correct username.
+Note: If your psql user is not "postgres", please modify this script in `package.json` to use your correct username.
 ```
 "db:setup": "psql -U postgres -f dbsetup.sql"
 ```
