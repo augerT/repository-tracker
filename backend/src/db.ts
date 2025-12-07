@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 
+// Maybe make these environment variables later
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',

@@ -34,7 +34,7 @@ export const SYNC_LATEST_RELEASE = gql`
 
 export const SYNC_ALL_REPOS = gql`
   mutation SyncAllRepos {
-    syncAllRepos
+    syncedReposCount
   }
 `;
 
