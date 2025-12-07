@@ -26,63 +26,42 @@ const theme = createTheme({
   },
 });
 
-// Hardcoded data
-const mockRepos = [
-  {
-    id: 1,
-    name: 'vue.js',
-    owner: 'vuejs',
-    version: '10.2.2020-05-10',
-    releaseNotes: `Welcome to the September 2019 release of Visual Studio Code. There are a number of updates in this version that we hope you will like, some of the key highlights include:
-
-**Text selections displayed in minimap** - See selection locations at a glance in the minimap overview.
-**Toggle region folding keyboard shortcut** - Quickly expand and collapse regions with Toggle Fold.
-**Source Control tree view** - Display pending changes in either a list or new tree view.
-**Open terminal in custom working directory** - Add keyboard shortcuts for specific folders.
-**HTML ARIA attribute reference** - ARIA attributes now have descriptions and links to MDN documentation.`
-  },
-  {
-    id: 2,
-    name: 'vscode',
-    owner: 'microsoft',
-    version: '10.2.2020-05-10',
-    releaseNotes: 'Release notes for VS Code...'
-  },
-  {
-    id: 3,
-    name: 'tensorflow',
-    owner: 'tensorflow',
-    version: '10.2.2020-05-10',
-    releaseNotes: 'TensorFlow latest release information...'
-  },
-  {
-    id: 4,
-    name: 'lodash',
-    owner: 'lodash',
-    version: '10.2.2020-05-10',
-    releaseNotes: 'Lodash utility library updates...'
-  },
-];
+// Type definition for a repository
+export interface Repository {
+  id: number;
+  name: string;
+  owner: string;
+  version: string;
+  releaseNotes: string;
+}
 
 function App() {
-  const [repos, setRepos] = useState(mockRepos);
-  const [selectedRepo, setSelectedRepo] = useState<typeof mockRepos[0] | null>(mockRepos[0]);
+  const [repos, setRepos] = useState<Repository[]>([]);
+  const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
 
   const handleAddRepo = (owner: string, name: string) => {
-    const newRepo = {
-      id: repos.length + 1,
+    const newRepo: Repository = {
+      id: Date.now(), // Use timestamp as simple unique ID
       name,
       owner,
       version: 'N/A',
       releaseNotes: 'No release notes available yet.'
     };
     setRepos([...repos, newRepo]);
+
+    // Auto-select the first repo if none selected
+    if (!selectedRepo) {
+      setSelectedRepo(newRepo);
+    }
   };
 
   const handleRemoveRepo = (id: number) => {
-    setRepos(repos.filter(repo => repo.id !== id));
+    const updatedRepos = repos.filter(repo => repo.id !== id);
+    setRepos(updatedRepos);
+
+    // If we removed the selected repo, select the first available one
     if (selectedRepo?.id === id) {
-      setSelectedRepo(repos[0] || null);
+      setSelectedRepo(updatedRepos[0] || null);
     }
   };
 
