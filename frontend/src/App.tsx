@@ -14,7 +14,8 @@ import {
 import RepoList from './components/RepoList';
 import ReleaseNotes from './components/ReleaseNotes';
 import AddRepo from './components/AddRepo';
-import { GET_REPOS, ADD_REPO, REMOVE_REPO } from '../apollo/queries';
+import { GET_REPOS } from '../apollo/queries';
+import { ADD_REPO, REMOVE_REPO } from '../apollo/mutations';
 
 // Create a custom theme
 const theme = createTheme({
@@ -61,7 +62,7 @@ function App() {
 
   });
   const [removeRepoMutation] = useMutation(REMOVE_REPO, {
-    refetchQueries: [{ query: REMOVE_REPO }],
+    refetchQueries: [{ query: GET_REPOS }],
   });
 
 
