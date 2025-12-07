@@ -8,18 +8,7 @@ export const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache({
     typePolicies: {
-      Query: {
-        fields: {
-          trackedRepos: {
-            // Merge incoming data with existing cache
-            merge(existing = [], incoming) {
-              return incoming;
-            },
-          },
-        },
-      },
       Repo: {
-        // Define how to identify each repo uniquely
         keyFields: ['id'],
       },
     },
