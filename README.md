@@ -72,7 +72,7 @@ This will launch frontend and backend processes concurrently.
 
 ### -Real-time update tracking  
 
-Updates must be fetched by using the Sync Releases button. This makes testing the synchronization logic easier, and it's unlikely a repository will actually trigger a new release during the current usage of the app. If this were made for a production, the best way to implement this would be webhooks via GitHub API, as suggested.
+Updates must be fetched by using the Sync Releases button. This makes testing the synchronization logic easier, and it's unlikely a repository will actually trigger a new release during the current usage of the app. If this were made for a production, a goodway to implement this would be webhooks via GitHub API, as suggested.
 
 ### -User must know owner / repository names when adding repositories
 
