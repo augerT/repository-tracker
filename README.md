@@ -84,6 +84,10 @@ An even better solution could be to use a search REST API to display a list of r
 
 I kept it this way for testing purposes, as it makes it easier to test both the repository release fetching, as well as the seenByUser flag. 
 
+### -Latest release is not shown on selected repository when "Sync Releases" is pressed
+
+User must manually re-click their currently selected repository to see the latest release. On one hand, it does clearly show that a new release is there, but on the other, it does feel a bit unintuitive. 
+
 ### -Repository always gets added to the bottom of the list, and may reorganize on "Sync Releases"
 
 Repositories are sorted alphabetically, but a new repository always gets added to the bottom of the list. It should insert where appropriate, and syncing releases does reorganize the alphabetical order. Different options for sorting could also be implemented, as well as filtering, as mentioned in the stretch goals.
