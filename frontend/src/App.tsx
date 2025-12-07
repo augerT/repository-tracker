@@ -83,7 +83,7 @@ function App() {
     name: repo.name,
     owner: repo.owner,
     version: repo.latestReleaseTag || 'N/A',
-    releaseNotes: repo.latestReleaseNotes || 'No release notes available yet.',
+    releaseNotes: repo.latestReleaseNotes || 'No release notes available yet. Try syncing releases to fetch the latest release information.',
     seenByUser: repo.seenByUser,
     releaseDate: repo.latestReleaseDate || null,
   })) || [];

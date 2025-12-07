@@ -42,7 +42,7 @@ const AddRepo: React.FC<AddRepoProps> = ({ onAdd, onSyncAll }) => {
             onClick={onSyncAll}
             size="small"
           >
-            Refresh
+            Sync Releases
           </Button>
         </Box>
         <Box
