@@ -1,3 +1,4 @@
+// Resolver to match the database snake_case
 export const repoFieldResolvers = {
   latestReleaseTag: (parent: any) => parent.latest_release_tag,
   latestReleaseDate: (parent: any) => parent.latest_release_date,

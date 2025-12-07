@@ -3,11 +3,11 @@ export const typeDefs = `#graphql
     id: ID!
     name: String!
     owner: String!
+    seenByUser: Boolean!
     latestReleaseId: ID
     latestReleaseTag: String
     latestReleaseDate: String
     latestReleaseNotes: String
-    seenByUser: Boolean
   }
 
   type Query {
