@@ -8,6 +8,7 @@ interface RepoData {
   owner: string;
   version: string;
   releaseNotes: string;
+  seenByUser: boolean;
 }
 
 interface RepoListProps {
@@ -33,6 +34,7 @@ const RepoList: React.FC<RepoListProps> = ({
             name={repo.name}
             owner={repo.owner}
             version={repo.version}
+            seenByUser={repo.seenByUser}
             isSelected={selectedRepo?.id === repo.id}
             onSelect={() => onSelectRepo(repo)}
             onRemove={onRemoveRepo}

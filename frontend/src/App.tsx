@@ -15,7 +15,7 @@ import RepoList from './components/RepoList';
 import ReleaseNotes from './components/ReleaseNotes';
 import AddRepo from './components/AddRepo';
 import { GET_REPOS } from '../apollo/queries';
-import { ADD_REPO, REMOVE_REPO, SYNC_ALL_REPOS } from '../apollo/mutations';
+import { ADD_REPO, REMOVE_REPO, SYNC_ALL_REPOS, MARK_REPO_SEEN } from '../apollo/mutations';
 
 // Create a custom theme
 const theme = createTheme({
@@ -36,6 +36,7 @@ export interface Repository {
   owner: string;
   version: string;
   releaseNotes: string;
+  seenByUser: boolean;
 }
 
 // Type the GraphQL response
@@ -70,6 +71,10 @@ function App() {
     refetchQueries: [{ query: GET_REPOS }],
   });
 
+  const [markRepoSeenMutation] = useMutation(MARK_REPO_SEEN, {
+    refetchQueries: [{ query: GET_REPOS }],
+  });
+
 
   const repos: Repository[] = data?.trackedRepos.map((repo: any) => ({
     id: repo.id,
@@ -77,6 +82,7 @@ function App() {
     owner: repo.owner,
     version: repo.latestReleaseTag || 'N/A',
     releaseNotes: repo.latestReleaseNotes || 'No release notes available yet.',
+    seenByUser: repo.seenByUser,
   })) || [];
 
   const handleAddRepo = async (owner: string, name: string) => {
@@ -109,6 +115,21 @@ function App() {
       }
     } catch (err) {
       console.error('Error removing repository:', err);
+    }
+  };
+
+  const handleSelectRepo = async (repo: Repository) => {
+    setSelectedRepo(repo);
+
+    // Mark as seen if it hasn't been seen
+    if (!repo.seenByUser) {
+      try {
+        await markRepoSeenMutation({
+          variables: { id: repo.id.toString() },
+        });
+      } catch (err) {
+        console.error('Error marking repo as seen:', err);
+      }
     }
   };
 
@@ -161,7 +182,7 @@ function App() {
                 <RepoList
                   repos={repos}
                   selectedRepo={selectedRepo}
-                  onSelectRepo={setSelectedRepo}
+                  onSelectRepo={(repo) => handleSelectRepo(repo)}
                   onRemoveRepo={handleRemoveRepo}
                 />
               </Box>

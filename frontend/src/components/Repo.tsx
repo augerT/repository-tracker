@@ -15,6 +15,7 @@ interface RepoProps {
   owner: string;
   version: string;
   isSelected: boolean;
+  seenByUser: boolean;
   onSelect: () => void;
   onRemove: (id: number) => void;
 }
@@ -23,6 +24,7 @@ const Repo: React.FC<RepoProps> = ({
   id,
   name,
   owner,
+  seenByUser,
   version,
   isSelected,
   onSelect,
@@ -65,7 +67,7 @@ const Repo: React.FC<RepoProps> = ({
                 color: isSelected ? 'white' : 'text.secondary'
               }}
             />
-            {isSelected && (
+            {!seenByUser && (
               <Chip
                 label="New"
                 size="small"

@@ -56,9 +56,7 @@ export const mutations = {
 
   syncAllRepos: async () => {
     try {
-      // Get all repos from database
-      const result = await pool.query('SELECT id, owner, name FROM repos');
-      const repos = result.rows;
+      const repos = await queries.trackedRepos();
 
       // Sync each repo
       const syncResults = await Promise.allSettled(
@@ -69,7 +67,7 @@ export const mutations = {
             throw new Error(`No releases found for repository ${repo.owner}/${repo.name}`);
           }
 
-          if(latestRelease.latestReleaseId === repo.latestReleaseId) {
+          if(latestRelease.latestReleaseId == repo.latest_release_id) {
             return repo.id; // No update needed
           }
           
