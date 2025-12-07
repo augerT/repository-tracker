@@ -82,7 +82,7 @@ An even better solution could be to use a search REST API to display a list of r
 
 ### -Latest release is not grabbed when adding a repository
 
-I kept it this way for testing purposes, as it makes it easier to test both the repository release fetching, as well as the seenByUser flag. 
+I kept it this way for testing purposes, as it makes it easier to test both the repository release fetching, as well as the seenByUser flag. This could be pretty easily implemented using `fetchLatestRelease` method in `octokit.js` when adding a repository.
 
 ### -Latest release is not shown on selected repository when "Sync Releases" is pressed
 
