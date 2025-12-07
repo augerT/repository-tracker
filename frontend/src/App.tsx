@@ -37,6 +37,7 @@ export interface Repository {
   version: string;
   releaseNotes: string;
   seenByUser: boolean;
+  releaseDate?: string | null;
 }
 
 // Type the GraphQL response
@@ -48,6 +49,7 @@ interface GetReposData {
     url: string;
     latestReleaseTag: string | null;
     latestReleaseNotes: string | null;
+    latestReleaseDate: string | null;
     seenByUser: boolean;
   }>;
 }
@@ -83,6 +85,7 @@ function App() {
     version: repo.latestReleaseTag || 'N/A',
     releaseNotes: repo.latestReleaseNotes || 'No release notes available yet.',
     seenByUser: repo.seenByUser,
+    releaseDate: repo.latestReleaseDate || null,
   })) || [];
 
   const handleAddRepo = async (owner: string, name: string) => {

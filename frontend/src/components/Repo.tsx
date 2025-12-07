@@ -23,7 +23,6 @@ interface RepoProps {
 const Repo: React.FC<RepoProps> = ({
   id,
   name,
-  owner,
   seenByUser,
   version,
   isSelected,

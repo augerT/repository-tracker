@@ -13,6 +13,7 @@ interface Repo {
   owner: string;
   version: string;
   releaseNotes: string;
+  releaseDate?: string | null;
 }
 
 interface ReleaseNotesProps {
@@ -30,6 +31,21 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({ repo }) => {
     );
   }
 
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return null;
+
+    // Unix timestamp
+    const timestamp = parseInt(dateString, 10);
+    const date = new Date(timestamp);
+
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+  };
+
   return (
     <Paper sx={{ p: 3, minHeight: '500px' }}>
       <Box sx={{ mb: 2 }}>
@@ -40,6 +56,11 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({ repo }) => {
           Version: {repo.version}
         </Typography>
       </Box>
+      {repo.releaseDate && (
+        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+          Released on {formatDate(repo.releaseDate)}
+      </Typography>
+      )}
       <Divider sx={{ mb: 3 }} />
       <Box sx={{
         '& p': { mb: 2, lineHeight: 1.7 },

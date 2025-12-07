@@ -7,8 +7,6 @@ export const ADD_REPO = gql`
       name
       owner
       url
-      latestReleaseTag
-      latestReleaseNotes
       seenByUser
     }
   }
@@ -25,6 +23,7 @@ export const SYNC_LATEST_RELEASE = gql`
     syncLatestRelease(id: $id) {
       id
       latestReleaseTag
+      latestReleaseDate
       latestReleaseNotes
       seenByUser
     }
