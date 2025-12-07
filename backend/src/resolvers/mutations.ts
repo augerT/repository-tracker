@@ -67,6 +67,7 @@ export const mutations = {
             throw new Error(`No releases found for repository ${repo.owner}/${repo.name}`);
           }
 
+          // The query returns a repo from the DB, so the keys are in snake_case
           if(latestRelease.latestReleaseId == repo.latest_release_id) {
             return repo.id; // No update needed
           }
