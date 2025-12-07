@@ -1,3 +1,4 @@
+/*Modules*/
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import {
@@ -11,11 +12,15 @@ import {
   createTheme,
   CssBaseline,
 } from '@mui/material';
+/*Components*/
 import RepoList from './components/RepoList';
 import ReleaseNotes from './components/ReleaseNotes';
 import AddRepo from './components/AddRepo';
+/*GraphQL*/
 import { GET_REPOS } from '../apollo/queries';
 import { ADD_REPO, REMOVE_REPO, SYNC_ALL_REPOS, MARK_REPO_SEEN } from '../apollo/mutations';
+/*Types*/
+import { Repository } from './types/repository';
 
 // Create a custom theme
 const theme = createTheme({
@@ -28,17 +33,6 @@ const theme = createTheme({
     },
   },
 });
-
-// Type definition for a repository
-export interface Repository {
-  id: number;
-  name: string;
-  owner: string;
-  version: string;
-  releaseNotes: string;
-  seenByUser: boolean;
-  releaseDate?: string | null;
-}
 
 // Type the GraphQL response
 interface GetReposData {

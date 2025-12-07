@@ -6,18 +6,11 @@ import {
   Divider
 } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
+import { Repository } from '../types/repository';
 
-interface Repo {
-  id: number;
-  name: string;
-  owner: string;
-  version: string;
-  releaseNotes: string;
-  releaseDate?: string | null;
-}
 
 interface ReleaseNotesProps {
-  repo: Repo | null;
+  repo: Repository | null;
 }
 
 const ReleaseNotes: React.FC<ReleaseNotesProps> = ({ repo }) => {

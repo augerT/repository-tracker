@@ -1,20 +1,12 @@
 import React from 'react';
 import { Paper, List } from '@mui/material';
 import Repo from './Repo';
-
-interface RepoData {
-  id: number;
-  name: string;
-  owner: string;
-  version: string;
-  releaseNotes: string;
-  seenByUser: boolean;
-}
+import { Repository } from '../types/repository';
 
 interface RepoListProps {
-  repos: RepoData[];
-  selectedRepo: RepoData | null;
-  onSelectRepo: (repo: RepoData) => void;
+  repos: Repository[];
+  selectedRepo: Repository | null;
+  onSelectRepo: (repo: Repository) => void;
   onRemoveRepo: (id: number) => void;
 }
 
