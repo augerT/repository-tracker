@@ -54,6 +54,59 @@ export const mutations = {
     return result.rows[0];
   },
 
+  syncAllRepos: async () => {
+    try {
+      // Get all repos from database
+      const result = await pool.query('SELECT id, owner, name FROM repos');
+      const repos = result.rows;
+
+      // Sync each repo
+      const syncResults = await Promise.allSettled(
+        repos.map(async (repo) => {
+          const latestRelease = await fetchLatestRelease(repo.owner, repo.name);
+
+          if (!latestRelease) {
+            throw new Error(`No releases found for repository ${repo.owner}/${repo.name}`);
+          }
+
+          if(latestRelease.latestReleaseId === repo.latestReleaseId) {
+            return repo.id; // No update needed
+          }
+          
+          await pool.query(
+            `UPDATE repos 
+              SET latest_release_tag = $1, 
+                  latest_release_name = $2, 
+                  latest_release_date = $3, 
+                  latest_release_url = $4, 
+                  latest_release_notes = $5,
+                  latest_release_id = $6,
+                  seen_by_user = false
+              WHERE id = $7`,
+            [
+              latestRelease.tag,
+              latestRelease.name,
+              latestRelease.publishedAt,
+              latestRelease.url,
+              latestRelease.notes,
+              latestRelease.latestReleaseId,
+              repo.id
+            ]
+          );
+
+          return repo.id;
+        })
+      );
+
+      // Return count of successfully synced repos
+      const successCount = syncResults.filter(r => r.status === 'fulfilled').length;
+      return successCount;
+    } catch (error) {
+      console.error('Error syncing all repos:', error);
+      throw new Error('Failed to sync repositories');
+    }
+  },
+
   markRepoSeen: async (_parent: undefined, { id }: { id: string }) => {
     const result = await pool.query(
       'UPDATE repos SET seen_by_user = TRUE WHERE id = $1 RETURNING *',

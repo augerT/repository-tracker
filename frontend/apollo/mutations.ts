@@ -31,6 +31,12 @@ export const SYNC_LATEST_RELEASE = gql`
   }
 `;
 
+export const SYNC_ALL_REPOS = gql`
+  mutation SyncAllRepos {
+    syncAllRepos
+  }
+`;
+
 export const MARK_REPO_SEEN = gql`
   mutation MarkRepoSeen($id: ID!) {
     markRepoSeen(id: $id)

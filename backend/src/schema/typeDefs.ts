@@ -23,5 +23,6 @@ export const typeDefs = `#graphql
     removeRepo(id: ID!): Boolean!
     syncLatestRelease(id: ID!): Repo!
     markRepoSeen(id: ID!): Boolean!
+    syncAllRepos: Int  # Returns count of synced repos
   }
 `;

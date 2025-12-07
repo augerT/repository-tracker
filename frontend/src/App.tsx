@@ -15,7 +15,7 @@ import RepoList from './components/RepoList';
 import ReleaseNotes from './components/ReleaseNotes';
 import AddRepo from './components/AddRepo';
 import { GET_REPOS } from '../apollo/queries';
-import { ADD_REPO, REMOVE_REPO } from '../apollo/mutations';
+import { ADD_REPO, REMOVE_REPO, SYNC_ALL_REPOS } from '../apollo/mutations';
 
 // Create a custom theme
 const theme = createTheme({
@@ -61,7 +61,12 @@ function App() {
     refetchQueries: [{ query: GET_REPOS }],
 
   });
+
   const [removeRepoMutation] = useMutation(REMOVE_REPO, {
+    refetchQueries: [{ query: GET_REPOS }],
+  });
+
+  const [syncAllReposMutation] = useMutation(SYNC_ALL_REPOS, {
     refetchQueries: [{ query: GET_REPOS }],
   });
 
@@ -85,8 +90,11 @@ function App() {
   };
 
   const handleSyncAll = async () => {
-    console.log('Syncing all repositories...');
-    // Backend implementation coming next
+    try {
+      await syncAllReposMutation();
+    } catch (err) {
+      console.error('Error syncing all repositories:', err);
+    }
   };
 
   const handleRemoveRepo = async (id: number) => {
