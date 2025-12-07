@@ -34,18 +34,37 @@ const theme = createTheme({
   },
 });
 
-// Type the GraphQL response
+// Types
 interface GetReposData {
   trackedRepos: Array<{
     id: number;
     name: string;
     owner: string;
-    url: string;
     latestReleaseTag: string | null;
     latestReleaseNotes: string | null;
     latestReleaseDate: string | null;
     seenByUser: boolean;
   }>;
+}
+
+interface AddRepoData {
+  addRepo: {
+    id: number;
+    name: string;
+    owner: string;
+    seenByUser: boolean;
+    latestReleaseTag: null;
+    latestReleaseNotes: null;
+    latestReleaseDate: null;
+  };
+}
+
+interface RemoveRepoData {
+  removeRepo: boolean;
+}
+
+interface MarkRepoSeenData {
+  markRepoSeen: boolean;
 }
 
 
@@ -54,23 +73,63 @@ function App() {
 
   const { loading, error, data } = useQuery<GetReposData>(GET_REPOS);
 
-  const [addRepoMutation] = useMutation(ADD_REPO, {
-    refetchQueries: [{ query: GET_REPOS }],
+  const [addRepoMutation] = useMutation<AddRepoData>(ADD_REPO, {
+    update(cache, { data }) {
 
+      if (!data?.addRepo) return;
+
+      // Read existing cache
+      const existingRepos = cache.readQuery<GetReposData>({ query: GET_REPOS });
+
+      // Write updated cache
+      if (existingRepos) {
+        cache.writeQuery({
+          query: GET_REPOS,
+          data: {
+            trackedRepos: [...existingRepos.trackedRepos, data.addRepo],
+          },
+        });
+      }
+    },
   });
 
-  const [removeRepoMutation] = useMutation(REMOVE_REPO, {
-    refetchQueries: [{ query: GET_REPOS }],
+  const [removeRepoMutation] = useMutation<RemoveRepoData>(REMOVE_REPO, {
+    update(cache, { data }, { variables }) {
+      // Read existing cache
+      const existingRepos = cache.readQuery<GetReposData>({ query: GET_REPOS });
+
+      // Write updated cache with repo removed
+      if (existingRepos) {
+        cache.writeQuery({
+          query: GET_REPOS,
+          data: {
+            trackedRepos: existingRepos.trackedRepos.filter(
+              repo => repo.id !== variables?.id
+            ),
+          },
+        });
+      }
+    },
+  });
+
+  const [markRepoSeenMutation] = useMutation<MarkRepoSeenData>(MARK_REPO_SEEN, {
+    update(cache, { data }, { variables }) {
+      // Directly update the specific repo in cache
+      cache.modify({
+        id: cache.identify({ __typename: 'Repo', id: variables?.id }),
+        fields: {
+          seenByUser() {
+            return true;
+          },
+        },
+      });
+    },
   });
 
   const [syncAllReposMutation] = useMutation(SYNC_ALL_REPOS, {
+    // For syncAll, we need to refetch since we don't know what changed
     refetchQueries: [{ query: GET_REPOS }],
   });
-
-  const [markRepoSeenMutation] = useMutation(MARK_REPO_SEEN, {
-    refetchQueries: [{ query: GET_REPOS }],
-  });
-
 
   const repos: Repository[] = data?.trackedRepos.map((repo: any) => ({
     id: repo.id,

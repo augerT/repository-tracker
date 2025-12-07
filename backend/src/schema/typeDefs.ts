@@ -2,13 +2,10 @@ export const typeDefs = `#graphql
   type Repo {
     id: ID!
     name: String!
-    url: String!
     owner: String!
     latestReleaseId: ID
     latestReleaseTag: String
-    latestReleaseName: String
     latestReleaseDate: String
-    latestReleaseUrl: String
     latestReleaseNotes: String
     seenByUser: Boolean
   }

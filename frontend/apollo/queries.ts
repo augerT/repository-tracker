@@ -6,11 +6,8 @@ export const GET_REPOS = gql`
       id
       name
       owner
-      url
       latestReleaseTag
-      latestReleaseName
       latestReleaseDate
-      latestReleaseUrl
       latestReleaseNotes
       seenByUser
     }

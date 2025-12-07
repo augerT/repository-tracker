@@ -6,8 +6,10 @@ export const ADD_REPO = gql`
       id
       name
       owner
-      url
       seenByUser
+      latestReleaseTag
+      latestReleaseNotes
+      latestReleaseDate
     }
   }
 `;

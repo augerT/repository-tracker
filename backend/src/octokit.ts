@@ -4,9 +4,7 @@ const octokit = new Octokit({});
 
 interface LatestRelease {
   tag: string;
-  name: string | null;
   publishedAt: string | null;
-  url: string;
   latestReleaseId: number;
   notes: string | null | undefined;
 }
@@ -15,7 +13,6 @@ interface RepoInfo {
   id: number;
   name: string;
   owner: string;
-  url: string;
 }
 
 export async function getRepo(owner: string, name: string): Promise<RepoInfo | false> {
@@ -29,7 +26,6 @@ export async function getRepo(owner: string, name: string): Promise<RepoInfo | f
       id: result.data.id,
       name: result.data.name,
       owner: result.data.owner.login,
-      url: result.data.html_url,
     }
   } catch (error) {
     console.error(`Repo ${owner}/${name} not found:`, error);
@@ -46,9 +42,7 @@ export async function fetchLatestRelease(owner: string, repo: string): Promise<L
 
     return {
       tag: data.tag_name,
-      name: data.name,
       publishedAt: data.published_at,
-      url: data.html_url,
       notes: data.body,
       latestReleaseId: data.id,
     };

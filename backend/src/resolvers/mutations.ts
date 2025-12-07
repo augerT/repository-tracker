@@ -10,8 +10,8 @@ export const mutations = {
     }
 
     const result = await pool.query(
-      'INSERT INTO repos (id, name, owner, url, seen_by_user) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [repo.id, repo.name, repo.owner, repo.url, false]
+      'INSERT INTO repos (id, name, owner, seen_by_user) VALUES ($1, $2, $3, $4) RETURNING *',
+      [repo.id, repo.name, repo.owner, false]
     );
 
     return result.rows[0];
@@ -40,15 +40,13 @@ export const mutations = {
     const result = await pool.query(
       `UPDATE repos 
        SET latest_release_tag = $1, 
-           latest_release_name = $2, 
-           latest_release_date = $3, 
-           latest_release_url = $4,
-           latest_release_id = $5,
-           latest_release_notes = $6,
+           latest_release_date = $2, 
+           latest_release_id = $3,
+           latest_release_notes = $4,
            seen_by_user = FALSE
-       WHERE id = $7
+       WHERE id = $5
        RETURNING *`,
-      [latestRelease.tag, latestRelease.name, latestRelease.publishedAt, latestRelease.url, latestRelease.latestReleaseId, latestRelease.notes, id]
+      [latestRelease.tag, latestRelease.publishedAt, latestRelease.latestReleaseId, latestRelease.notes, id]
     );
 
     return result.rows[0];
@@ -75,18 +73,14 @@ export const mutations = {
           await pool.query(
             `UPDATE repos 
               SET latest_release_tag = $1, 
-                  latest_release_name = $2, 
-                  latest_release_date = $3, 
-                  latest_release_url = $4, 
-                  latest_release_notes = $5,
-                  latest_release_id = $6,
+                  latest_release_date = $2, 
+                  latest_release_notes = $3,
+                  latest_release_id = $4,
                   seen_by_user = false
-              WHERE id = $7`,
+              WHERE id = $5`,
             [
               latestRelease.tag,
-              latestRelease.name,
               latestRelease.publishedAt,
-              latestRelease.url,
               latestRelease.notes,
               latestRelease.latestReleaseId,
               repo.id
