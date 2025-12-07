@@ -103,3 +103,12 @@ Persistent caching could be implemented to improve performance on future releoad
 ### - Mobile Responsiveness
 
 Stretch goal, as suggested. Has not been tested or designed for mobile responsiveness.
+
+### - Extend more from the Github API result
+
+There are a number of useful keys from the Github API result that could enhance the user exprience, including:
+
+- Github URL
+- Release URL
+- Owner
+- Repo Stars
