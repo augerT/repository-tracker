@@ -8,12 +8,14 @@ import {
   Typography
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import SyncIcon from '@mui/icons-material/Sync';
 
 interface AddRepoProps {
   onAdd: (owner: string, name: string) => void;
+  onSyncAll: () => void;
 }
 
-const AddRepo: React.FC<AddRepoProps> = ({ onAdd }) => {
+const AddRepo: React.FC<AddRepoProps> = ({ onAdd, onSyncAll }) => {
   const [owner, setOwner] = useState('');
   const [name, setName] = useState('');
 
@@ -29,9 +31,20 @@ const AddRepo: React.FC<AddRepoProps> = ({ onAdd }) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Add New Repository
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h6">
+            Add New Repository
+          </Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<SyncIcon />}
+            onClick={onSyncAll}
+            size="small"
+          >
+            Sync All
+          </Button>
+        </Box>
         <Box
           component="form"
           onSubmit={handleSubmit}

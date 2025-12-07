@@ -84,6 +84,11 @@ function App() {
     }
   };
 
+  const handleSyncAll = async () => {
+    console.log('Syncing all repositories...');
+    // Backend implementation coming next
+  };
+
   const handleRemoveRepo = async (id: number) => {
     try {
       await removeRepoMutation({
@@ -141,7 +146,10 @@ function App() {
             {/* Left Side - Repository List */}
             <Grid size={{ xs: 12, md: 4 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <AddRepo onAdd={handleAddRepo} />
+                <AddRepo 
+                  onAdd={handleAddRepo} 
+                  onSyncAll={handleSyncAll} 
+                />
                 <RepoList
                   repos={repos}
                   selectedRepo={selectedRepo}
