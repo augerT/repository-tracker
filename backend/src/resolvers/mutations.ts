@@ -44,10 +44,11 @@ export const mutations = {
            latest_release_date = $3, 
            latest_release_url = $4,
            latest_release_id = $5,
+           latest_release_notes = $6,
            seen_by_user = FALSE
-       WHERE id = $6
+       WHERE id = $7
        RETURNING *`,
-      [latestRelease.tag, latestRelease.name, latestRelease.publishedAt, latestRelease.url, latestRelease.latestReleaseId, id]
+      [latestRelease.tag, latestRelease.name, latestRelease.publishedAt, latestRelease.url, latestRelease.latestReleaseId, latestRelease.notes, id]
     );
 
     return result.rows[0];

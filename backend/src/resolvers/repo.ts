@@ -4,5 +4,6 @@ export const repoFieldResolvers = {
   latestReleaseDate: (parent: any) => parent.latest_release_date,
   latestReleaseUrl: (parent: any) => parent.latest_release_url,
   latestReleaseId: (parent: any) => parent.latest_release_id,
+  latestReleaseNotes: (parent: any) => parent.latest_release_notes,
   seenByUser: (parent: any) => parent.seen_by_user,
 };

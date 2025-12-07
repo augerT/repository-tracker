@@ -9,6 +9,7 @@ export const typeDefs = `#graphql
     latestReleaseName: String
     latestReleaseDate: String
     latestReleaseUrl: String
+    latestReleaseNotes: String
     seenByUser: Boolean
   }
 

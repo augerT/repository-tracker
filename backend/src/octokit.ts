@@ -8,6 +8,7 @@ interface LatestRelease {
   publishedAt: string | null;
   url: string;
   latestReleaseId: number;
+  notes: string | null | undefined;
 }
 
 interface RepoInfo {
@@ -48,6 +49,7 @@ export async function fetchLatestRelease(owner: string, repo: string): Promise<L
       name: data.name,
       publishedAt: data.published_at,
       url: data.html_url,
+      notes: data.body,
       latestReleaseId: data.id,
     };
   } catch (error) {
