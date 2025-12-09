@@ -66,9 +66,22 @@ npm run dev
 
 This will launch frontend and backend processes concurrently.
 
+## Testing - Backend
+
+### 1. Configure backend/.env.test
+
+Add your GitHub API token to the `.env.test` file to avoid rate limits.
+Make sure to configure your DB_USER and DB_PASSWORD variables as well to match your `.env` file!
+
+### 2. Running the tests
+
+From the project root 
+
+Test: `npm run test:backend`
+
+Test with coverage report: `npm run test:backend:coverage`
+
 ## Missing Features / Bugs / Suggestions for improvements
-
-
 
 ### -Real-time update tracking  
 

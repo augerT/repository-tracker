@@ -1,6 +1,21 @@
 import { Octokit } from '@octokit/rest';
+import dotenv from 'dotenv';
 
-const octokit = new Octokit({});
+if (process.env.NODE_ENV === 'test') {
+  dotenv.config({ path: '.env.test' });
+} else {
+  dotenv.config();
+}
+
+// Add a token to increase rate limits, should work fine without one too
+// Testing should definitely use a token to avoid hitting limits!
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN, 
+});
+
+if (!process.env.GITHUB_TOKEN) {
+  console.warn('⚠️  No GITHUB_TOKEN found. API rate limit: 60/hour. Add token to .env for 5000/hour.');
+}
 
 interface LatestRelease {
   tag: string;

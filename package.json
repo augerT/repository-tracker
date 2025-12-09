@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:backend": "cd backend && npm test",
+    "test:backend:coverage": "cd backend && npm run test:coverage",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "install": "concurrently \"npm run install:backend\" \"npm run install:frontend\"",
     "install:backend": "cd backend && npm install",
     "install:frontend": "cd frontend && npm install",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm start",
-    "db:setup": "psql -U postgres -f dbsetup.sql"
+    "db:setup": "psql -U postgres -f dbsetup.sql",
+    "testdb:setup": "psql -U postgres -f ./backend/test/test-dbsetup.sql"
   },
   "keywords": [],
   "author": "",
