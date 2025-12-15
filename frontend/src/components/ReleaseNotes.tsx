@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 import { Repository } from '../types/repository';
+import rehypeRaw from 'rehype-raw';
 
 
 interface ReleaseNotesProps {
@@ -55,7 +56,25 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({ repo }) => {
       </Typography>
       )}
       <Divider sx={{ mb: 3 }} />
-      <ReactMarkdown>{repo.releaseNotes}</ReactMarkdown>
+      <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
+        components={{
+          img: ({ node, ...props }) => (
+            <Box
+              component="img"
+              {...props}
+              sx={{
+                maxWidth: '100%',
+                height: 'auto',
+                borderRadius: 1,
+                my: 2
+              }}
+            />
+          )
+        }}
+      >
+        {repo.releaseNotes}
+      </ReactMarkdown>
     </Paper>
   );
 };
