@@ -95,14 +95,20 @@ function App() {
 
   const [removeRepoMutation] = useMutation<RemoveRepoData>(REMOVE_REPO, {
     update(cache, { data }, { variables }) {
-      if (!variables?.id) return;
+      // Read existing cache
+      const existingRepos = cache.readQuery<GetReposData>({ query: GET_REPOS });
 
-      // Evict the repo from cache
-      const normalizedId = cache.identify({ __typename: 'Repo', id: variables.id });
-      cache.evict({ id: normalizedId });
-
-      // Clean up any dangling references
-      cache.gc();
+      // Write updated cache with repo removed
+      if (existingRepos) {
+        cache.writeQuery({
+          query: GET_REPOS,
+          data: {
+            trackedRepos: existingRepos.trackedRepos.filter(
+              repo => repo.id !== variables?.id
+            ),
+          },
+        });
+      }
     },
   });
 
