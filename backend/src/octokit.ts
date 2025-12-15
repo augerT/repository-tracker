@@ -48,11 +48,11 @@ export async function getRepo(owner: string, name: string): Promise<RepoInfo | f
   }
 }
 
-export async function fetchLatestRelease(owner: string, repo: string): Promise<LatestRelease | null> {
+export async function fetchLatestRelease(owner: string, name: string): Promise<LatestRelease | null> {
   try {
     const { data } = await octokit.repos.getLatestRelease({
       owner,
-      repo,
+      repo: name,
     });
 
     return {
@@ -62,7 +62,7 @@ export async function fetchLatestRelease(owner: string, repo: string): Promise<L
       latestReleaseId: data.id,
     };
   } catch (error) {
-    console.error(`Error fetching latest release for ${owner}/${repo}:`, error);
+    console.error(`Error fetching latest release for ${owner}/${name}:`, error);
     return null;
   }
 }
